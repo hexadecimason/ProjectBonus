@@ -13,7 +13,7 @@ using namespace std;
 */
 template <class DT>
 class HashTableVector
-{
+{	
   protected:
     vector< vector < DT > >* htable;
 
@@ -24,7 +24,7 @@ class HashTableVector
     int hashing(char a); // H(x) = a - A (as ASCII values).
 	void displayTable(); // Displays numeric keys followed by stored values.
 	void remove(string str); // Removal method.
-	
+	int find(string a); // searches for a given value.
 };
 
 // Default constructor is the only constructor.
@@ -43,15 +43,47 @@ HashTableVector<DT>::~HashTableVector(){
 template <class DT>
 void HashTableVector<DT>::insert(string str){
 
+	//////////////////////////////////////////////////////////////////////////////////
+	int foundBool = find(str);
+
+	if(foundBool == -1) {
+		int key = hashing(str[0]);
+
+		if (key >= htable->size()){
+			htable->resize(key+1);
+		}
+
+		htable->at(key).push_back(str);
+		// cout << (*htable)[index][0] << endl;
+	}
+	else {
+		cout << "element to be added already existent: " << str << endl;
+	}
+	//////////////////////////////////////////////////////////////////////////////////
+
+	/*
     int key = hashing(str[0]);
 
 	// resize if necessary
 	if(htable->size() <= key){
-		htable->resize(key+1);
+		htable->resize(key+1); 
 	}
 
 	htable->at(key).push_back(str);
+	*/
+}
 
+// "find" helper method lets us verify if a value has already been added
+template <class DT>
+int HashTableVector<DT>::find(string a){
+
+	for (int i = 0; i < this->htable->size(); i++) {
+		for (int j = 0; j < this->htable->at(i).size(); j++)
+			if(this->htable->at(i).at(j) == a)
+				return i; 
+	}
+
+return -1;
 }
 
 // Our hash function is a simple sum of two ASCII values.
@@ -100,6 +132,7 @@ void HashTableVector<DT>::remove(string str){
 		}
 	}
 }
+
 
 
 
